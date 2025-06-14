@@ -1,0 +1,9 @@
+node_modules
+.env
+.next
+build
+dist
+supabase/.temp
+supabase/.branches
+drizzle
+*.log
