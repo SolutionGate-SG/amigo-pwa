@@ -16,6 +16,25 @@ html, body {
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Mobile-first in src/app/globals.css */
+.product-grid {
+  @apply grid-cols-2 gap-4; /* 2 columns on mobile */
+  @apply md:grid-cols-3 lg:grid-cols-4; /* 3-4 columns on desktop */
+}
+.search-bar {
+  @apply w-1/2 p-1 rounded; /* Mobile */
+  @apply md:w-3/4; /* Desktop */
+}
+main {
+  @apply p-4; /* Mobile padding */
+  @apply md:p-8; /* Desktop padding */
+}
+
+button {
+  @apply bg-blue-500 text-white px-4 py-2 rounded;
+  @apply hover:bg-blue-600; /* Desktop hover */
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

@@ -12,7 +12,7 @@ export default function CartPage() {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <main className="container mx-auto p-4 sm:p-6 lg:p-8 min-h-[calc(100vh-120px)]"> {/* Responsive padding and min-height */}
+    <main className="container mx-auto p-4 sm:p-6 lg:p-8 min-h-[calc(100vh-120px)] lg:grid-cols-4"> {/* Responsive padding and min-height */}
       <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-gray-800">Your Shopping Cart</h1>
 
       {items.length === 0 ? (

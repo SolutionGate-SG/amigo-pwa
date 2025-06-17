@@ -3,7 +3,7 @@
    import { Button } from '@/components/ui/button';
    import { Card, CardContent, CardHeader } from '@/components/ui/card';
    import Image from 'next/image';
-   import { products, productVariants } from '@/lib/mock-data';
+   import { products, productVariants } from '@/lib/products';
    import { useCartStore } from '@/lib/store';
    import { notFound, useParams } from 'next/navigation';
 
@@ -18,8 +18,8 @@
      }
 
      return (
-       <main className="p-4">
-         <Card className="max-w-md mx-auto">
+       <main className="container mx-auto p-4">
+         <Card className="max-w-md mx-auto md:max-w-3xl lg:max-w-5xl">
            <CardHeader className="p-0">
              <div className="relative w-full h-64">
                <Image
