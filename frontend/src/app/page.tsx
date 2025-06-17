@@ -13,7 +13,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 // Data imports - assuming a consolidated mock-data file
-import { products, categories } from '@/lib/mock-data'; // Adjust path if your products are in a different file like '@/app/lib/products'
+import { products, categories, banners } from '@/lib/mock-data'; // Adjust path if your products are in a different file like '@/app/lib/products'
 import { useCartStore } from '@/lib/store';
 
 export default function Home() {
@@ -35,21 +35,21 @@ export default function Home() {
           className="rounded-lg shadow-md" // Added shadow for better visual separation
         >
           {/* Slice to show only a few products in the slider, e.g., first 5 */}
-          {products.slice(0, 5).map((product) => (
-            <SwiperSlide key={product.id}>
-              <Link href={`/product/${product.id}`}>
+          {banners.slice(0, 5).map((banner) => (
+            <SwiperSlide key={banner.id}>
+              <Link href={`/banner/${banner.id}`}>
                 <div className="relative w-full h-48 sm:h-64 md:h-80 lg:h-96"> {/* Responsive height */}
                   <Image
-                    src={product.image_url}
-                    alt={product.name}
+                    src={banner.image_url}
+                    alt={banner.name}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Optimize image loading
                     className="object-cover rounded-lg"
                     priority // Prioritize loading for above-the-fold content
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white p-4 rounded-b-lg">
-                    <h3 className="text-xl font-bold truncate">{product.name}</h3>
-                    <p className="text-lg">NPR {product.base_price}</p>
+                    <h3 className="text-xl font-bold truncate">{banner.name}</h3>
+                    {/* <p className="text-lg">NPR {banner.base_price}</p> */}
                   </div>
                 </div>
               </Link>
@@ -61,7 +61,7 @@ export default function Home() {
       {/* Categories */}
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Browse Categories</h2>
-        <div className="flex gap-3 flex-wrap justify-center"> {/* Added justify-center for better alignment */}
+        <div className="flex gap-3 flex-wrap justify-start"> {/* Added justify-center for better alignment */}
           {categories.map((category) => (
             <Link key={category.id} href={`/category/${category.name.toLowerCase()}`}> {/* Link to category page */}
               <Badge variant="secondary" className="px-4 py-2 text-base cursor-pointer hover:bg-gray-200 transition-colors">

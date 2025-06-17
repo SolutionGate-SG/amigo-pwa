@@ -1,9 +1,0 @@
-{
-  "projects": [
-    {
-      "name": "amigo-pwa-frontend",
-      "root": "frontend",
-      "framework": "nextjs"
-    }
-  ]
-}

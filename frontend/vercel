@@ -1,0 +1,9 @@
+{
+  "projects": [
+    {
+      "name": "amigo-frontend",
+      "root": "frontend",
+      "framework": "nextjs"
+    }
+  ]
+}
