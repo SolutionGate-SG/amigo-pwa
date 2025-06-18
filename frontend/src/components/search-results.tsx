@@ -1,12 +1,12 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { products } from '@/lib/mock-data';
+import { products } from '@/lib/products';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import translations from '@/app/lib/i18n/ne.json';
+import translations from '@/lib/i18n/ne.json';
 import { useCartStore } from '@/lib/store';
 
 export default function SearchResults() {
@@ -59,6 +59,7 @@ export default function SearchResults() {
                         quantity: 1,
                         price: product.base_price,
                         name: product.name,
+                        image_url: product.image_url,
                       })
                     }
                   >

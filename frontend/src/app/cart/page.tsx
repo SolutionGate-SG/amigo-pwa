@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useCartStore } from '@/lib/store';
 
 export default function CartPage() {
-  const { items, removeItem, clearCart } = useCartStore();
+  const { items, removeItem} = useCartStore();
 
   // Calculate the total price of all items in the cart
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -47,7 +47,7 @@ export default function CartPage() {
                   variant="destructive"
                   size="sm"
                   className="px-3 py-1 text-sm font-medium"
-                  onClick={() => removeItem(item.productId, item.variantId)} // Pass variantId for specific removal
+                  onClick={() => removeItem(item.productId)} // Pass variantId for specific removal
                 >
                   Remove
                 </Button>
@@ -80,7 +80,6 @@ export default function CartPage() {
                   <Button
                     variant="outline"
                     className="w-full py-3 text-lg font-semibold border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
-                    onClick={clearCart}
                   >
                     Clear Cart
                   </Button>

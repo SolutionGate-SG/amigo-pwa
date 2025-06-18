@@ -26,6 +26,7 @@ export default function ProductCardClientActions({
       quantity: 1, // Assuming default quantity is 1
       price: productPrice,
       name: productName,
+      image_url: '', // You can pass an image URL if available, or leave it empty
     });
     // Optional: Add a simple alert or toast notification for user feedback
     alert(`${productName} added to cart!`);

@@ -6,6 +6,7 @@ type CartItem = {
   quantity: number;
   price: number;
   name: string;
+  image_url: string; // URL of the product image
 };
 
 type CartState = {

@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useCartStore } from '@/lib/store';
-import { products } from '@/lib/mock-data';
+import { products } from '@/lib/products';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -47,6 +47,7 @@ export default function WishlistPage() {
                         quantity: 1,
                         price: item.base_price,
                         name: item.name,
+                        image_url: item.image_url,
                       })
                     }
                   >
