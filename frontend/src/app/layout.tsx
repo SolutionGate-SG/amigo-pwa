@@ -9,8 +9,8 @@ import AppFooter from '@/components/app-footer';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Amigo eStore PWA',
-  description: 'Multivendor eCommerce Amigo eStore PWA',
+  title: 'Amigo eStore',
+  description: 'Multivendor eCommerce Amigo eStore',
   manifest: '/manifest.json',
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -8,35 +8,90 @@ import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { FaDownload } from "react-icons/fa6";
 
 export default function AppHeader() {
   const [search, setSearch] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isInstallPrompt, setIsInstallPrompt] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
   const { items } = useCartStore();
   const router = useRouter();
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallPrompt(true);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (deferredPrompt) {
+      (deferredPrompt as any).prompt();
+      const { outcome } = await (deferredPrompt as any).userChoice;
+      if (outcome === "accepted") {
+        setIsInstallPrompt(false);
+      }
+      setDeferredPrompt(null);
+    }
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (search.trim()) {
       router.push(`/search?q=${encodeURIComponent(search)}`);
+      setIsMenuOpen(false); // Close menu on search
     }
   };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    // In a real application, you'd handle authentication here (e.g., API call)
+    console.log("Login/Sign Up logic here");
     setIsLoginOpen(false);
   };
+
+  const menuItems = (
+    <>
+      <Link
+        href="/categories"
+        className="text-gray-600 hover:text-blue-500"
+        onClick={() => setIsMenuOpen(false)}
+      >
+        Categories
+      </Link>
+      <Link
+        href="/cart"
+        className="relative"
+        onClick={() => setIsMenuOpen(false)}
+      >
+        <Button variant="secondary">Cart ({items.length})</Button>
+      </Link>
+      <Button
+        onClick={() => {
+          setIsLoginOpen(true);
+          setIsMenuOpen(false);
+        }}
+        variant="outline"
+      >
+        Account
+      </Button>
+    </>
+  );
 
   return (
     <header className="sticky top-0 z-20 bg-white shadow-md p-4">
       <div className="container mx-auto flex items-center justify-between">
-          <Link href="/" className="hidden sm:block text-2xl font-bold text-blue-600">
-            Amigo eStore
-          </Link>
+        <Link href="/" className="text-2xl font-bold text-blue-600">
+          Amigo eStore
+        </Link>
 
-        <div className="hidden md:flex flex-grow max-w-xl mx-4 mt-0">
+        {/* Desktop Search */}
+        <div className="hidden md:flex flex-grow max-w-xl mx-4">
           <form onSubmit={handleSearch} className="w-full">
             <Input
               type="text"
@@ -49,38 +104,39 @@ export default function AppHeader() {
           </form>
         </div>
 
-        <nav className="hidden md:flex items-center gap-4">
-          <Link
-            href="/categories"
-            className="text-gray-600 hover:text-blue-500"
-          >
-            Categories
-          </Link>
-          <Link href="/cart" className="relative">
-            <Button variant="secondary">Cart ({items.length})</Button>
-          </Link>
-          <Button onClick={() => setIsLoginOpen(true)} variant="outline">
-            Account
-          </Button>
-        </nav>
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-4">{menuItems}</nav>
 
+        {isInstallPrompt && (
+          <Button
+            onClick={handleInstall}
+            variant="outline"
+            className="gap-2 ms-auto mr-2 !bg-transparent"
+          >
+            <FaDownload className="text-sky-600" />{translations.install_app}
+          </Button>
+        )}
+
+        {/* Mobile Menu Button */}
         <Button className="md:hidden" onClick={() => setIsMenuOpen(true)}>
           <FaBars />
         </Button>
-
-        <div className="md:hidden w-full mt-4">
-          <form onSubmit={handleSearch}>
-            <Input
-              type="text"
-              placeholder="Search products"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500"
-            />
-          </form>
-        </div>
       </div>
 
+      {/* Mobile Search (below header on mobile) */}
+      <div className="md:hidden w-full mt-4">
+        <form onSubmit={handleSearch}>
+          <Input
+            type="text"
+            placeholder="Search products"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-full border-gray-300 focus:ring-2 focus:ring-blue-500"
+          />
+        </form>
+      </div>
+
+      {/* Mobile Menu Dialog */}
       <Transition appear show={isMenuOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -114,29 +170,7 @@ export default function AppHeader() {
                   <Button onClick={() => setIsMenuOpen(false)} className="mb-4">
                     <FaTimes />
                   </Button>
-                  <nav className="flex flex-col gap-4">
-                    <Link
-                      href="/categories"
-                      className="text-gray-600 hover:text-blue-500"
-                    >
-                      Categories
-                    </Link>
-                    <Link
-                      href="/cart"
-                      className="text-gray-600 hover:text-blue-500"
-                    >
-                      Cart ({items.length})
-                    </Link>
-                    <Button
-                      onClick={() => {
-                        setIsLoginOpen(true);
-                        setIsMenuOpen(false);
-                      }}
-                      variant="outline"
-                    >
-                      Account
-                    </Button>
-                  </nav>
+                  <nav className="flex flex-col gap-4">{menuItems}</nav>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
@@ -144,6 +178,7 @@ export default function AppHeader() {
         </Dialog>
       </Transition>
 
+      {/* Login Dialog */}
       <Transition appear show={isLoginOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -193,7 +228,7 @@ export default function AppHeader() {
                       required
                       className="w-full"
                     />
-                    <div className="flex flex-col gap-2">
+                    <div className="flex gap-2">
                       <Button type="submit" className="w-full">
                         Login
                       </Button>
