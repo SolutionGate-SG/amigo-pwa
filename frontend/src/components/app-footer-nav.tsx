@@ -1,12 +1,19 @@
 // src/components/app-footer-nav.tsx
 'use client'; // This component needs client-side hooks
 
+import { useCartStore } from '@/lib/store';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { FaHome, FaShoppingCart, FaUser, FaEnvelope } from 'react-icons/fa';
-import { useCartStore } from '@/lib/store'; // Your Zustand store
 
 export default function AppFooterNav() {
-  const cartItems = useCartStore((state) => state.items);
+  const { cart, fetchCart } = useCartStore();
+
+  useEffect(() => {
+    fetchCart(); // Fetch cart on component mount
+  }, [fetchCart]);
+
+  const cartItems = cart || []; // Fallback to empty array if cart is undefined
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-t-md z-20">

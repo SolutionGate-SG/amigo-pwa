@@ -16,7 +16,7 @@ import 'swiper/css/pagination';
 // from the Server Component `page.tsx` after fetching.
 import { banners } from '@/lib/mock-data'; // Assuming this data is pre-fetched/static
 
-export default function HomeHeroSwiper() {
+export default function SwiperSlider() {
   // Filter banners or use specific ones for the hero section
   const heroBanners = banners.slice(0, 3); // Example: show first 3 banners
 

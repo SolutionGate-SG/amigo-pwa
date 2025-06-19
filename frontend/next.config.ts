@@ -1,12 +1,20 @@
-import withPWA from 'next-pwa';
+// next.config.js
 
-const pwaConfig = withPWA({
+import withPWAInit from 'next-pwa';
+
+const withPWA = withPWAInit({
   dest: 'public',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',
 });
 
-export default pwaConfig({
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
-});
+  images: {
+    remotePatterns: [new URL('https://placehold.co/**')],
+  },
+};
+
+export default withPWA(nextConfig);
